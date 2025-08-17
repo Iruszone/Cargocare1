@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+  <link rel="icon" href="{{url_for('static',filename='images/1729774224193.png')}}">
+        <link rel="stylesheet" href="{{url_for('static',filename='css/sign.css')}}">
+</head>
+<body background="{{url_for('static',filename='images/background_image.webp')}}";>
+    
+    <div class="signup-container">
+        <img src="{{url_for('static',filename='images/Cargocare Logo.png')}}" alt="Crgocare" class="logo">
+        <h2>Sign Up</h2>
+        <form id="signup-form" onsubmit="return validateForm()" method="POST">
+            
+            <input type="text" id="username" name="aname" placeholder="Username">
+
+           
+            <input type="email" id="Email" name="semail" placeholder="Email">
+
+            
+            <input type="password" id="password" name="apass" placeholder="Password">
+
+          
+            <input type="password" id="confirm-password" name="sconfirm" placeholder="Confirm-password">
+
+            <button type="submit" name="signup">Sign Up</button>
+        </form>
+        <p class="font">Already have an account? <a href="{{ url_for('login') }}" class="loginn">Log in</a></p>
+        <p><a href="{{ url_for('index') }}" class="loginn">Home</a></p>
+    </div>
+    <script src="login.js"></script>
+</body>
+</html>

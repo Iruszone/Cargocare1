@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cargocaptain</title>
+    <link rel="icon" href="{{url_for('static',filename='images/1729774224193.png')}}">
+        <link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}">
+        <script src="{{url_for('static',filename='js/ccc.js')}}"></script>
+<style>
+    *{
+        font-family: Arial, Helvetica, sans-serif;
+    }
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    border-color: black;
+    margin-top: 10px;
+   
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ff0000;
+    transition: 0.4s;
+    border-radius: 34px;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: rgb(255, 255, 255);
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+
+  input:checked + .slider {
+    background-color: #09b600;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(26px);
+  }
+
+  /* Text display for the toggle state */
+  #toggleState {
+    margin-top: 10px;
+    font-size: 1.2em;
+    color: #333333;
+  }
+</style>
+  <style>
+    header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+    background-color: #4CAF50;
+    color: white;
+}
+
+h1 {
+    margin: 0;
+    font-size: 24px;
+}
+    button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button#toggleDuty {
+    background-color: #ff5722;
+    color: white;
+}
+
+main {
+    text-align: center;
+    width: 100%;
+}
+    #rideRequest {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#buttons button {
+    margin: 10px;
+    background-color: #4CAF50;
+    color: white;
+}
+
+#buttons button:nth-child(2) {
+    background-color: #f44336;
+}
+  </style>
+</head>
+<body background="{{url_for('static',filename='images/background_image.webp')}}">
+    <header class="header">
+      <div class="logo">
+        <img src="{{url_for('static',filename='images/Cargocare Logo.png')}}" alt="Cargocare">
+    </div>
+        <div class="auth-links">
+            <nav>
+            <a href="{{ url_for('login') }}" class="login" >Login</a>
+            <a href="{{ url_for('sign') }}" class="signup">Sign Up</a>
+            <a href="{{ url_for('registration') }}" class="signup">Register</a>
+            <a href="{{ url_for('driver_status') }}" class="signup">Update</a>
+            <a href="{{ url_for('index') }}" class="signup">Ride</a>
+            <div class="profile">
+                <img src="{{ url_for('static',filename='images/profile-logo.jpg') }}" alt="Profile Logo" class="profile-logo" onclick="toggleDropdown()">
+                <div id="dropdown" class="dropdown-content">
+                    
+                    <button onclick="logout()">Log Out</button>
+                </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+        <center>
+
+            <h2 style="color: rgb(255, 255, 255); background-color: rgba(0, 0, 0, 0.718);  display: inline-block; margin-top: 10px; border-radius: 5px; padding: 5px;">Driver Dashboard</h2><br>
+        <label class="switch">
+            <input type="checkbox" id="toggleSwitch">
+            <span class="slider"></span>
+          </label>
+          
+          <p id="toggleState">OFF Duty</p>
+          
+          <script>
+            const toggleSwitch = document.getElementById('toggleSwitch');
+            const toggleState = document.getElementById('toggleState');
+          
+            // Function to update the toggle state text
+            function updateToggleState() {
+              toggleState.textContent = toggleSwitch.checked ? "ON Duty" : "OFF Duty";
+            }
+          
+            // Initial load
+            updateToggleState();
+          
+            // Add event listener for the toggle switch
+            toggleSwitch.addEventListener('change', updateToggleState);
+          </script>
+          </center>
+          <center>
+          <div class="form-container" >
+            <section id="rideRequest">
+                <center><h2>Incoming Ride Request</h2></center>
+                <p id="pickup">Pick-Up Location: Kolar</p>
+                <p id="dropoff">Drop-Off Location:Bengaluru</p>
+                <div id="buttons">
+                    <button onclick="acceptRide()">Accept</button>
+                    <button onclick="rejectRide()">Reject</button>
+                </div>
+            </section>
+        </main>
+          </div>
+          </center>
+          <div id="contact">
+            <h2>Contact Us</h2>
+            <p>Email: support@cargocare.com</p>
+            <p>Phone: +123-456-7890</p>
+            <button onclick="goToSection('Contact')"></button>
+        </div>
+        
+    
+</body>
+<footer>
+    <p>&copy; 2024 Cargocare. All rights reserved.</p>
+  </footer>
+</html>

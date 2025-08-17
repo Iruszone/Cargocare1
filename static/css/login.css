@@ -1,0 +1,138 @@
+/* styles.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  
+  body, html {
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background-size: cover;
+    
+  }
+  
+  .login-container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+  }
+  
+  .login-card {
+    background-color:rgba(255, 255, 255, 0.221);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 350px;
+    border-style: solid ;
+    border-width: 1px;
+  }
+  .input-field{
+    background-color: rgba(255, 255, 255, 0.814);
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 4px;
+  }
+  
+  .logo {
+    width: 120px;
+    margin-bottom: 15px;
+    border-style:solid;
+    border-width: 2px;
+    border-color: #333;
+    border-radius: 3px;
+  }
+  
+  h2 {
+    font-size: 24px;
+    color: #000000;
+    margin-bottom: 20px;
+  }
+  
+  .input-field {
+    margin-bottom: 15px;
+    position:relative;
+  }
+  
+  .input-field input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  
+  .login-button {
+    width: 100%;
+    padding: 10px;
+    background:#007bffdc;
+    color: white;
+    font-size: 16px;
+    border: solid black 1px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .login-button:hover {
+    background: #0056b3;
+  }
+  
+  .social-login p {
+    margin: 15px 0;
+    color: #666;
+  }
+  
+  .google-login, .facebook-login {
+    margin: 5px;
+    padding: 10px;
+    width: 48%;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+  }
+  
+  .google-login {
+    background: #ff3c2abc;
+    color: white;
+    border: solid black 1px;
+  }
+  
+  .google-login:hover {
+    background: #b53129;
+  }
+  
+  .facebook-login {
+    background: #2b66e5c0;
+    color: white;
+    border: solid black 1px;
+  }
+  
+  .facebook-login:hover {
+    background: #2d4373;
+  }
+  
+  .signup {
+    font-size: 14px;
+    margin-top: 20px;
+  }
+  .signup a {
+    color: #0073e6;
+    text-decoration: none;
+  }
+  
+  .signup a:hover {
+    text-decoration: underline;
+  }

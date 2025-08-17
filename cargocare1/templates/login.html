@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="icon" href="{{url_for('static',filename='images/1729774224193.png')}}">
+        <link rel="stylesheet" href="{{url_for('static',filename='css/login.css')}}">
+    </head>
+</head>
+<body background="{{url_for('static',filename='images/background_image.webp')}}";>
+  <div class="login-container">
+    <div class="login-card">
+      <img src="{{url_for('static',filename='images/Cargocare Logo.png')}}" alt="Platform Logo" class="logo">
+      <h2>Login</h2>
+      <form method="POST" action="/login">
+        <div class="input-field">
+          <input type="text" id="username" placeholder="Username" name="aname" autocomplete="off">
+        </div>
+        <div class="input-field">
+          <input type="password" id="password" placeholder="Password" name="apass" autocomplete="off">
+        </div>
+        <div class="remember-forgot">
+          <label><input type="checkbox"> Remember Me</label>
+          <a href="#" class="forgot-password">Forgot Password?</a>
+        </div>
+        <button type="submit" class="login-button" name="alogin">Login</button>
+      </form>
+      <div class="social-login">
+        <p style="color: black;">Or login with</p>
+        <button class="google-login">Google</button>
+        <button class="facebook-login">Facebook</button>
+      </div>
+      <p class="signup">Don’t have an account? <a href="{{ url_for('sign') }}">Sign Up</a></p>
+      <p class="signup"><a href="{{ url_for('index') }}">Home</a></p>
+    </div>
+  </div>
+</body>
+</html>

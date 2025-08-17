@@ -1,0 +1,47 @@
+<!-- driver_status.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Ride Management</title>
+    <link rel="icon" href="{{url_for('static',filename='images/1729774224193.png')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/driver_status.css')}}">
+</head>
+<body>
+    <div class="status-container">
+        <h1>Manage Ride</h1>
+        <div class="ride-details">
+            <p><strong>Ride ID: {{session["aid"]}}</strong></p>
+            <p><strong>Pickup: Kolar</strong></p>
+            <p><strong>Drop-off: Bengaluru</strong></p>
+        </div>
+        <div class="actions">
+            <button onclick="updateStatus('accepted')">Accept Ride</button>
+            <button onclick="updateStatus('rejected')">Reject Ride</button>
+            <button onclick="updateStatus('on-the-way')">On the Way</button>
+            <button onclick="updateStatus('picked-up')">Picked Up</button>
+            <button onclick="updateStatus('dropped-off')">Dropped Off</button>
+             <center><p class="signup"><a href="{{ url_for('ccc') }}">Home</a></p></center>
+        </div>
+        <p id="status-message"></p>
+    </div>
+
+    <script>
+        function updateStatus(status) {
+            const statusMessage = {
+                accepted: "You have accepted the ride.",
+                rejected: "You have rejected the ride.",
+                "on-the-way": "Ride is on the way.",
+                "picked-up": "Goods has been picked up.",
+                "dropped-off": "Goods has been dropped off.",
+            };
+
+            document.getElementById('status-message').innerText = statusMessage[status];
+            
+            // Notify the backend to update the customer
+            console.log(`Status updated: ${status}`);
+        }
+    </script>
+</body>
+</html>

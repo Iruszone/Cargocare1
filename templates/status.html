@@ -1,0 +1,67 @@
+<!-- customer_status.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Ride Status</title>
+    <link rel="icon" href="{{url_for('static',filename='images/1729774224193.png')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/customer_status.css')}}">
+</head>
+<body background="{{url_for('static',filename='images/background_image.webp')}}">
+    <div class="status-container">
+        <h1>Ride Status</h1>
+        <div class="ride-details">
+            <p><strong>Ride ID: TN 08 CM 2026</strong> </p>
+            <p><strong>Pickup: Kolar</strong> </p>
+            <p><strong>Drop-off: Bengaluru</strong> </p>
+            <p><strong>Driver: suri</strong> </p>
+            <p><strong>Vehicle: 1.5 Ton TATA Ace</strong> </p>
+            <p><strong>Status: On the Way</strong> <span id="ride-status"></span></p>
+        </div>
+        <button class="payment-button online" onclick="payOnline()">Pay Online</button>
+        <button class="payment-button offline" onclick="payOffline()">Pay Offline</button>
+        <button id="cancel-btn" onclick="cancelBooking()">Cancel Booking</button>
+        <center><p class="signup"><a href="{{ url_for('index') }}">Home</a></p></center>
+        <center><p id="cancel-warning" class="hidden">You cannot cancel the ride within 2 hours of the start time.</p></center>
+    </div>
+
+    <script>
+        // Sample data: Replace with actual server data
+        const rideStartTime = new Date().getTime() + 3 * 60 * 60 * 1000; // 3 hours from now
+
+        function cancelBooking() {
+            const currentTime = new Date().getTime();
+            const twoHoursBeforeRide = rideStartTime - 2 * 60 * 60 * 1000;
+
+            if (currentTime > twoHoursBeforeRide) {
+                document.getElementById('cancel-warning').classList.remove('hidden');
+                return;
+            }
+
+            // Call backend API to cancel the ride
+            alert("Booking cancelled successfully!");
+        }
+    </script>
+    <script>
+        // Function to handle online payment
+function payOnline() {
+    const confirmation = confirm("You will be redirected to the online payment gateway. Do you want to proceed?");
+    if (confirmation) {
+        // Simulate redirection to a payment gateway
+        alert("Redirecting to online payment gateway...");
+        window.location.href = "static/images/WhatsApp Image 2024-11-27 at 14.53.13_f85e3ce2.jpg"; // Replace with your payment gateway URL
+    }
+}
+
+// Function to handle offline payment
+function payOffline() {
+    const confirmation = confirm("You have chosen offline payment. The instructions will be provided. Do you want to proceed?");
+    if (confirmation) {
+        // Display offline payment instructions
+        alert("Please visit our nearest office or hand the payment to our representative.");
+    }
+}
+    </script>
+</body>
+</html>

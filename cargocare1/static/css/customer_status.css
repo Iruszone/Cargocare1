@@ -1,0 +1,51 @@
+/* customer_status.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.status-container {
+    max-width: 500px;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.856);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-left: 33%;
+    margin-top: 14%;
+    padding-top: 5px;
+    border-style:ridge;
+    border-color: black;
+    border-width: 1px;
+    padding-bottom: 12px;
+    margin-bottom: 140px;
+    
+}
+
+h1 {
+    text-align: center;
+    color: #007bff;
+}
+
+
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #ff4d4d;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #e60000;
+}
+
+.hidden {
+    
+    align-items: center;
+}

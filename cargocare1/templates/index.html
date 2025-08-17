@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Cargocare</title>
+        <link rel="icon" href="{{url_for('static',filename='images/1729774224193.png')}}">
+        <link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">   
+    </head>
+    <body background="{{url_for('static',filename='images/background_image.webp')}}">
+    <!-- Header Section -->
+    <header class="header">
+             <script src="{{url_for('static',filename='js/index.js')}}"></script>
+      <div class="logo">
+        <img src="{{url_for('static',filename='images/Cargocare Logo.png')}}" alt="Cargocare">
+    </div>
+        <div class="auth-links">
+            <nav>
+            <a href="#contact">Contact Us</a>
+            <a href="{{ url_for('status') }}" class="login" >Status</a>
+            <a href="{{ url_for('ccc') }}" class="login" >Driver</a>
+            <a href="{{ url_for('login') }}" class="login" >Login</a>
+            <a href="{{ url_for('sign') }}" class="signup">Sign Up</a>
+            <div class="profile">
+                <img src="{{url_for('static',filename='images/profile-logo.jpg')}}" alt="Profile Logo" class="profile-logo" onclick="toggleDropdown()">
+                <div id="dropdown" class="dropdown-content">
+                    <center>
+                        <h4 style="padding-bottom: 10px;">{{session["aname"]}}</h4>
+                        </center>
+                    <button onclick="logout()">Logout</button> 
+                </div>
+                </div>
+            </nav>
+        </div>
+        
+    </header>
+
+       <!-- LOCATION -->
+
+      <form class="form-container-2" method="POST" action="">
+        <!-- Pickup Location -->
+         <h2>BOOK A SHIPMENT</h2>
+        <div class="input-group">
+            <input type="text" name="pickup" id="pickup" placeholder="Pickup location">
+            <img src="{{url_for('static',filename='images/Pick up location.png')}}" alt="Pickup Icon">
+        </div>
+    
+        <!-- Dropoff Location -->
+        
+        <div class="input-group">
+            <input type="text" name="dropoff" id="dropoff" placeholder="Dropoff location">
+        </div>
+    
+        <!-- Date Picker -->
+        <div class="input-group1">
+            
+           <input type="date" name="date" required>
+        </div>
+    
+        <!-- Time Picker -->
+        <div class="input-group2">
+            <input type="time" name="time" requireds>
+        </div>
+    
+        <!-- See Prices Button -->
+        <div class="final">
+            <button onclick="toggleDropdown1()" class="button" id="ride-button" name="apply"> See Prices</button>
+            <div id="dropdown1" class="dropdown-content11">
+                
+                <span class="vehicle-item">
+                    <img src="{{url_for('static',filename='images/tata ace 1.5 ton.jpg')}}" alt="Profile Logo" class="vehicle">
+                    <figcaption>1.5 Ton</figcaption>
+                    <p class="vehicles">Price : </p>
+                    <button onclick="book1()" class="button1" name="book">Book</button>
+                </span><hr>
+                <span class="vehicle-item">
+                    <img src="{{url_for('static',filename='images/5 ton.jpg')}}" alt="Profile Logo" class="vehicle">
+                    <figcaption>5 Ton</figcaption>
+                    <p class="vehicles">Price :</p>
+                    <button onclick="book2()" class="button1" name="book">Book</button>
+                </span><hr>
+                <span class="vehicle-item">
+                    <img src="{{url_for('static',filename='images/eicher1.webp')}}" alt="Profile Logo" class="vehicle">
+                    <figcaption>7.5 Ton</figcaption>
+                    <p class="vehicles">Price :</p>
+                    <button onclick="book3()" class="button1" >Book</button>
+                </span>
+            </div>
+            </div>
+      </form>
+
+        <div id="map"></div>
+        <div id="info"></div>
+        <div id="pricing"></div>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    
+        <script>
+            // Initialize the map
+            const map = L.map('map').setView([20.5937, 78.9629], 5); // Default to India
+    
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+    
+            // Routing control
+            let control = null;
+    
+            // Function to locate address and calculate route
+            async function locateAndRoute(pickupAddress, dropoffAddress) {
+                try {
+                    // Fetch coordinates for Pick-Up location
+                    const pickupResponse = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(pickupAddress)}`);
+                    const pickupData = await pickupResponse.json();
+    
+                    if (!pickupData.length) {
+                        alert(`Pick-Up address not found: ${pickupAddress}`);
+                        return;
+                    }
+    
+                    const pickupLatLng = [parseFloat(pickupData[0].lat), parseFloat(pickupData[0].lon)];
+    
+                    // Fetch coordinates for Drop-Off location
+                    const dropoffResponse = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(dropoffAddress)}`);
+                    const dropoffData = await dropoffResponse.json();
+    
+                    if (!dropoffData.length) {
+                        alert(`Drop-Off address not found: ${dropoffAddress}`);
+                        return;
+                    }
+    
+                    const dropoffLatLng = [parseFloat(dropoffData[0].lat), parseFloat(dropoffData[0].lon)];
+    
+                    // Add routing control to the map
+                    if (control) {
+                        map.removeControl(control); // Remove any previous route
+                    }
+    
+                    control = L.Routing.control({
+                        waypoints: [
+                            L.latLng(...pickupLatLng),
+                            L.latLng(...dropoffLatLng)
+                        ],
+                        routeWhileDragging: true,
+                        showAlternatives: false,
+                        addWaypoints: false,
+                        createMarker: (i, waypoint, n) => {
+                            return L.marker(waypoint.latLng, {
+                                draggable: false
+                            }).bindPopup(i === 0 ? "Pick-Up" : "Drop-Off");
+                        }
+                    }).on('routesfound', (e) => {
+                        const route = e.routes[0];
+                        const distance = (route.summary.totalDistance / 1000).toFixed(2); // Convert meters to kilometers
+                        const time = Math.ceil(route.summary.totalTime / 60); // Convert seconds to minutes
+                        document.getElementById('info').innerText = `Distance: ${distance} km | Estimated Time: ${time} minutes`;
+                    }).addTo(map);
+    
+                    // Adjust map view
+                    map.fitBounds(L.latLngBounds(pickupLatLng, dropoffLatLng));
+                } catch (error) {
+                    alert("Error fetching address or routing data. Please try again.");
+                    console.error(error);
+                }
+            }
+    
+            // Event listener for the "Ride" button
+            document.getElementById('ride-button').addEventListener('click', () => {
+                const pickupAddress = document.getElementById('pickup').value;
+                const dropoffAddress = document.getElementById('dropoff').value;
+    
+                if (pickupAddress && dropoffAddress) {
+                    locateAndRoute(pickupAddress, dropoffAddress);
+                } else {
+                    alert("Please enter both Pick-Up and Drop-Off locations.");
+                }
+            });
+        </script>
+        <script>
+            // Define pricing per km for different vehicle sizes
+            const pricingRates = {
+                small: 10,  // Small vehicle rate per km
+                medium: 15, // Medium vehicle rate per km
+                large: 20   // Large vehicle rate per km
+            };
+        
+            // Function to calculate and display prices
+            function displayPricing(distance) {
+                const pricingDiv = document.getElementById('pricing');
+                pricingDiv.innerHTML = `
+                    <p> ₹${(distance * pricingRates.small).toFixed(2)}</p>
+                    <p> ₹${(distance * pricingRates.medium).toFixed(2)}</p>
+                    <p> ₹${(distance * pricingRates.large).toFixed(2)}</p>
+                `;
+            }
+        
+          
+        
+            // Modified locateAndRoute function
+            async function locateAndRoute(pickupAddress, dropoffAddress) {
+                try {
+                    const pickupResponse = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(pickupAddress)}`);
+                    const pickupData = await pickupResponse.json();
+        
+                    if (!pickupData.length) {
+                        alert(`Pick-Up address not found: ${pickupAddress}`);
+                        return;
+                    }
+        
+                    const pickupLatLng = [parseFloat(pickupData[0].lat), parseFloat(pickupData[0].lon)];
+        
+                    const dropoffResponse = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(dropoffAddress)}`);
+                    const dropoffData = await dropoffResponse.json();
+        
+                    if (!dropoffData.length) {
+                        alert(`Drop-Off address not found: ${dropoffAddress}`);
+                        return;
+                    }
+        
+                    const dropoffLatLng = [parseFloat(dropoffData[0].lat), parseFloat(dropoffData[0].lon)];
+        
+                    // Remove previous route if any
+                    if (control) {
+                        map.removeControl(control);
+                    }
+        
+                    control = L.Routing.control({
+                        waypoints: [
+                            L.latLng(...pickupLatLng),
+                            L.latLng(...dropoffLatLng)
+                        ],
+                        routeWhileDragging: true,
+                        showAlternatives: false,
+                        addWaypoints: false,
+                        createMarker: (i, waypoint, n) => {
+                            return L.marker(waypoint.latLng, {
+                                draggable: false
+                            }).bindPopup(i === 0 ? "Pick-Up" : "Drop-Off");
+                        }
+                    }).on('routesfound', (e) => {
+                        const route = e.routes[0];
+                        const distance = (route.summary.totalDistance / 1000).toFixed(2); // Convert meters to kilometers
+                        const time = Math.ceil(route.summary.totalTime / 60); // Convert seconds to minutes
+        
+                        // Update info and pricing
+                        document.getElementById('info').innerText = `Distance: ${distance} km | Estimated Time: ${time} minutes`;
+                        displayPricing(distance);
+                    }).addTo(map);
+        
+                    // Adjust map view
+                    map.fitBounds(L.latLngBounds(pickupLatLng, dropoffLatLng));
+                } catch (error) {
+                    alert("Error fetching address or routing data. Please try again.");
+                    console.error(error);
+                }
+            }
+            
+        </script>
+
+        <script>
+// Combined toggle function for the dropdown
+function toggleDropdown(dropdownId) {
+    const dropdown = document.getElementById(dropdownId);
+    dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+}
+
+// Modified async function for booking a vehicle
+async function bookVehicle(pickup, dropoff, vehicleCapacity) {
+    const response = await fetch('/book', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pickup, dropoff })
+    });
+
+    if (response.status === 401) {
+        alert("Please log in to book a vehicle.");
+        window.location.href = '/login';
+    } else {
+        alert(`${vehicleCapacity} Transport Successfully Booked!`);
+    }
+}
+
+// Function to book a 5 Ton vehicle
+function book5Ton(pickup, dropoff) {
+    bookVehicle(pickup, dropoff, "5 Ton");
+}
+
+// Function to book a 7.5 Ton vehicle
+function book7_5Ton(pickup, dropoff) {
+    bookVehicle(pickup, dropoff, "7.5 Ton");
+}
+
+// Function to book a 10 Ton vehicle
+function book10Ton(pickup, dropoff) {
+    bookVehicle(pickup, dropoff, "10 Ton");
+}
+
+  </script>
+
+        <script>
+ function toggleDropdown() {
+            const dropdown = document.getElementById("dropdown");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        }
+
+        // Modified async function for booking a vehicle with vehicle capacity
+        async function bookVehicle(pickup, dropoff, vehicleCapacity) {
+            const response = await fetch('/book', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pickup, dropoff })
+            });
+
+            if (response.status === 401) {
+                alert("Please log in to book a vehicle.");
+                window.location.href = '/login';
+            } else {
+                alert(`${vehicleCapacity} Transport Successfully Booked!`);
+            }
+        }
+
+        // Book a 1.5 Ton vehicle
+        function book1() {
+            const pickup = document.getElementById("pickup").value;
+            const dropoff = document.getElementById("dropoff").value;
+            if (pickup && dropoff) {
+                bookVehicle(pickup, dropoff, "1.5 Ton");
+            } else {
+                alert("Please provide both pickup and dropoff locations.");
+            }
+        }
+
+        // Book a 5 Ton vehicle
+        function book2() {
+            const pickup = document.getElementById("pickup").value;
+            const dropoff = document.getElementById("dropoff").value;
+            if (pickup && dropoff) {
+                bookVehicle(pickup, dropoff, "5 Ton");
+            } else {
+                alert("Please provide both pickup and dropoff locations.");
+            }
+        }
+
+        // Book a 7.5 Ton vehicle
+        function book3() {
+            const pickup = document.getElementById("pickup").value;
+            const dropoff = document.getElementById("dropoff").value;
+            if (pickup && dropoff) {
+                bookVehicle(pickup, dropoff, "7.5 Ton");
+            } else {
+                alert("Please provide both pickup and dropoff locations.");
+            }
+        }
+        </script>
+        
+    <div class="point"></div>
+      <div class="point2"></div>
+      <div class="point3"></div>
+      <div class="point4"></div>
+      <div class="point5"></div>
+      <div class="point6"></div>
+      <div class="point7"></div>
+      <script src="{{url_for('static',filename='js/index.js')}}"></script>
+      
+    
+
+    <!-- Contact Section -->
+    <div id="contact">
+        <h2>Contact Us</h2>
+        <p>Email: support@cargocare.com</p>
+        <p>Phone: +123-456-7890</p>
+        <button onclick="goToSection('Contact')"></button>
+    </div>
+</body>
+<footer>
+    <p>&copy; 2024 Cargocare. All rights reserved.</p>
+  </footer>
+</html>

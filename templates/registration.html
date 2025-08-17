@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Driver Registration</title>
+  <link rel="icon" href="{{url_for('static',filename='images/1729774224193.png')}}">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+     
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      grid-column: span 2;
+      padding: 10px;
+      background: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+
+    .full-width {
+      grid-column: span 2;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Driver Registration</h1>
+    <form id="driver-registration-form" method="POST" action="" enctype="multipart/form-data">
+      <!-- Personal Details -->
+      <div class="full-width">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" placeholder="Enter your full name" name="rname" required>
+      </div>
+
+      <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Enter your email" name="remail" required>
+      </div>
+
+      <div>
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone"  placeholder="Enter your phone number" name="rphone" required>
+      </div>
+
+      <div>
+        <label for="dob">Date of Birth</label>
+        <input type="date" id="dob" name="rdob" required>
+      </div>
+
+      <!-- Driving Details -->
+      <div class="full-width">
+        <label for="license-number">Driver's License Number</label>
+        <input type="text" id="license-number" name="rlicence" placeholder="Enter your license number" required>
+      </div>
+
+      <div class="full-width">
+        <label for="license-expiry">License Expiry Date</label>
+        <input type="date" id="license-expiry" name="rlicence_expiry_date" required>
+      </div>
+
+      <div class="full-width">
+        <label for="insurance">Vehicle Insurance Details</label>
+        <textarea id="insurance" name="rinsurance" rows="3" placeholder="Enter your vehicle insurance details" required></textarea>
+      </div>
+
+      <!-- Vehicle Details -->
+      <div>
+        <label for="vehicle-make">Vehicle Model</label>
+        <input type="text" id="vehicle-make" name="rvehicle_make" placeholder="Enter your vehicle make" required>
+      </div>
+
+      <div>
+        <label for="vehicle-model">Vehicle capacity</label>
+        <input type="text" id="vehicle-model" name="rvehicle_model" placeholder="Enter your vehicle model" required>
+      </div>
+
+      <div>
+        <label for="vehicle-year">Vehicle Year</label>
+        <input type="number" id="vehicle-year" name="rvehicle_year" placeholder="Enter vehicle year" min="1900" max="2024" required>
+      </div>
+
+      <div>
+        <label for="vehicle-number">Vehicle Registration Number</label>
+        <input type="text" id="vehicle-number" name="rvehicle_registration" placeholder="Enter vehicle registration number" required>
+      </div>
+
+
+      <!-- Submit Button -->
+      <button type="submit" name="register">Register</button>
+    </form>
+  </div>
+</body>
+</html>
